@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
-import 'package:flutter_mongo_example/user_create_page.dart';
+import 'package:flutter_mongo_example/user_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const UserCreatePage(),
+      home: const UserListPage(),
     );
   }
 }
