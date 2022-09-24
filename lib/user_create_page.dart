@@ -38,6 +38,6 @@ class _UserCreatePageState extends State<UserCreatePage> {
   Future<void> insertUser(String username, String password) async {
     var id = mongo.ObjectId();
     final data = UserModel(id: id, name: username, password: password);
-    var result = await MongoDatabase.insert(data);
+    await MongoDatabase.insert(data);
   }
 }

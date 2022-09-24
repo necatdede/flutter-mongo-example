@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+        ),
         primarySwatch: Colors.blue,
       ),
       home: const UserListPage(),
