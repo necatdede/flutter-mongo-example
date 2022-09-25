@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mongo_example/widgets/custom_button.dart';
 import 'package:flutter_mongo_example/widgets/custom_text_field.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
-import 'package:flutter_mongo_example/user_model.dart';
+import 'package:flutter_mongo_example/models/user_model.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class UserCreatePage extends StatefulWidget {

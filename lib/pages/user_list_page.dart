@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
 import 'package:flutter_mongo_example/pages/user_create_page.dart';
 import 'package:flutter_mongo_example/pages/user_update_page.dart';
-import 'package:flutter_mongo_example/user_model.dart';
+import 'package:flutter_mongo_example/models/user_model.dart';
 
 class UserListPage extends StatefulWidget {
   const UserListPage({Key? key}) : super(key: key);
