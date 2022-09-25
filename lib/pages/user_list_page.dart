@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
+import 'package:flutter_mongo_example/pages/user_create_page.dart';
+import 'package:flutter_mongo_example/pages/user_update_page.dart';
 import 'package:flutter_mongo_example/user_model.dart';
-import 'package:flutter_mongo_example/user_update_page.dart';
 
 class UserListPage extends StatefulWidget {
   const UserListPage({Key? key}) : super(key: key);
@@ -23,6 +24,20 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Add",
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const UserCreatePage();
+              },
+            ),
+          );
+        },
+      ),
       appBar: AppBar(),
       body: Container(
         color: Colors.white,
@@ -54,18 +69,30 @@ Card getCard(UserModel user, BuildContext context) {
     child: ListTile(
       title: Text(user.name),
       subtitle: Text(user.password),
-      trailing: IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) {
-                    return const UserUpdatePage();
-                  },
-                  settings: RouteSettings(arguments: user)),
-            );
-          },
-          icon: const Icon(Icons.edit)),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+              tooltip: "Edit",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) {
+                        return const UserUpdatePage();
+                      },
+                      settings: RouteSettings(arguments: user)),
+                );
+              },
+              icon: const Icon(Icons.edit)),
+          IconButton(
+              tooltip: "Delete",
+              onPressed: () async {
+                await MongoDatabase.delete(user);
+              },
+              icon: const Icon(Icons.delete)),
+        ],
+      ),
     ),
   );
 }

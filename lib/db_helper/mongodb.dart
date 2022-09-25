@@ -24,6 +24,11 @@ class MongoDatabase {
     await userCollection.save(result);
   }
 
+  static Future<void> delete(UserModel data) async {
+    var result = await userCollection.findOne({"_id": data.id});
+    await userCollection.remove(result);
+  }
+
   static Future<String> insert(UserModel user) async {
     try {
       var result = userCollection.insertOne(user.toJson());

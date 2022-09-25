@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
-import 'package:flutter_mongo_example/user_list_page.dart';
+import 'package:flutter_mongo_example/pages/user_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
           filled: true,
         ),
         primarySwatch: Colors.blue,
