@@ -5,7 +5,8 @@ import 'package:flutter_mongo_example/db_helper/mongodb.dart';
 import 'package:flutter_mongo_example/models/user_model.dart';
 
 class UserUpdatePage extends StatefulWidget {
-  const UserUpdatePage({Key? key}) : super(key: key);
+  final VoidCallback onSuccess;
+  const UserUpdatePage({Key? key, required this.onSuccess}) : super(key: key);
 
   @override
   State<UserUpdatePage> createState() => _UserUpdatePageState();
@@ -20,7 +21,9 @@ class _UserUpdatePageState extends State<UserUpdatePage> {
     name.text = user.name;
     password.text = user.password;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Flutter Mongo"),
+      ),
       body: Center(
           child: Column(
         children: [
@@ -31,8 +34,9 @@ class _UserUpdatePageState extends State<UserUpdatePage> {
             onPressed: () async {
               final data = UserModel(
                   id: user.id, name: name.text, password: password.text);
-              await MongoDatabase.update(data)
-                  .then((value) => Navigator.pop(context));
+              await MongoDatabase.update(data).then((value) {
+                return widget.onSuccess();
+              });
             },
           )
         ],

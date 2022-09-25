@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mongo_example/cubit/user_list_cubit.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
 import 'package:flutter_mongo_example/pages/user_create_page.dart';
 import 'package:flutter_mongo_example/pages/user_update_page.dart';
 import 'package:flutter_mongo_example/models/user_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserListPage extends StatefulWidget {
   const UserListPage({Key? key}) : super(key: key);
@@ -12,11 +14,10 @@ class UserListPage extends StatefulWidget {
 }
 
 class _UserListPageState extends State<UserListPage> {
-  List<UserModel> users = [];
-
+  final cubit = UserListCubit();
   @override
   void initState() {
-    get(users);
+    cubit.getData();
     super.initState();
   }
 
@@ -32,22 +33,34 @@ class _UserListPageState extends State<UserListPage> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return const UserCreatePage();
+                return UserCreatePage(
+                  onSuccess: () {
+                    cubit.getData();
+                    Navigator.pop(context);
+                  },
+                );
               },
             ),
           );
         },
       ),
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Flutter Mongo"),
+      ),
       body: Container(
         color: Colors.white,
         height: size.height,
         width: size.width,
         child: Center(
-          child: ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              return getCard(users[index], context);
+          child: BlocBuilder<UserListCubit, List<UserModel>>(
+            bloc: cubit,
+            builder: (context, state) {
+              return ListView.builder(
+                itemCount: state.length,
+                itemBuilder: (context, index) {
+                  return getCard(state[index], context, cubit);
+                },
+              );
             },
           ),
         ),
@@ -56,15 +69,7 @@ class _UserListPageState extends State<UserListPage> {
   }
 }
 
-void get(List<UserModel> users) async {
-  final result = await MongoDatabase.getData();
-  for (int i = 0; i < result.length; i++) {
-    final UserModel user = UserModel.fromJson(result[i]);
-    users.add(user);
-  }
-}
-
-Card getCard(UserModel user, BuildContext context) {
+Card getCard(UserModel user, BuildContext context, UserListCubit cubit) {
   return Card(
     child: ListTile(
       title: Text(user.name),
@@ -79,7 +84,12 @@ Card getCard(UserModel user, BuildContext context) {
                   context,
                   MaterialPageRoute(
                       builder: (context) {
-                        return const UserUpdatePage();
+                        return UserUpdatePage(
+                          onSuccess: () {
+                            cubit.getData();
+                            Navigator.pop(context);
+                          },
+                        );
                       },
                       settings: RouteSettings(arguments: user)),
                 );
@@ -89,6 +99,7 @@ Card getCard(UserModel user, BuildContext context) {
               tooltip: "Delete",
               onPressed: () async {
                 await MongoDatabase.delete(user);
+                cubit.getData();
               },
               icon: const Icon(Icons.delete)),
         ],

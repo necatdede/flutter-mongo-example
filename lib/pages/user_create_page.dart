@@ -6,7 +6,8 @@ import 'package:flutter_mongo_example/models/user_model.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class UserCreatePage extends StatefulWidget {
-  const UserCreatePage({Key? key}) : super(key: key);
+  final VoidCallback onSuccess;
+  const UserCreatePage({Key? key, required this.onSuccess}) : super(key: key);
 
   @override
   State<UserCreatePage> createState() => _UserCreatePageState();
@@ -18,14 +19,16 @@ class _UserCreatePageState extends State<UserCreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Flutter Mongo"),
+      ),
       body: Column(children: [
         CustomTextField(controller: usernameController, hintText: "Username"),
         CustomTextField(controller: passwordController, hintText: "Password"),
         CustomButton(
             onPressed: () {
               insertUser(usernameController.text, passwordController.text)
-                  .then((value) => Navigator.pop(context));
+                  .then((value) => widget.onSuccess());
             },
             buttonTitle: "Insert")
       ]),

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter Mongo',
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),
