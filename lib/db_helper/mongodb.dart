@@ -17,10 +17,21 @@ class MongoDatabase {
     return result;
   }
 
+  static Future<List<Map<String, dynamic>>> getDataByFilter(
+      String searchText) async {
+    final result = await userCollection.find({
+      'name': {
+        r'$regex': searchText,
+      }
+    }).toList();
+
+    return result;
+  }
+
   static Future<void> update(UserModel data) async {
     var result = await userCollection.findOne({"_id": data.id});
     result["name"] = data.name;
-    result["password"] = data.password;
+    result["phone"] = data.phone;
     await userCollection.save(result);
   }
 

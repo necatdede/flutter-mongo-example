@@ -13,22 +13,22 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 class UserModel {
   ObjectId id;
   String name;
-  String password;
+  String phone;
   UserModel({
     required this.id,
     required this.name,
-    required this.password,
+    required this.phone,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["_id"],
         name: json["name"],
-        password: json["password"],
+        phone: json["phone"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "name": name,
-        "password": password,
+        "phone": phone,
       };
 }

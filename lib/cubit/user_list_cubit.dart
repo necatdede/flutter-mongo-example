@@ -14,4 +14,14 @@ class UserListCubit extends Cubit<List<UserModel>> {
     }
     emit(users);
   }
+
+  Future<void> getDataByFilter(String searchText) async {
+    List<UserModel> users = [];
+    var result = await MongoDatabase.getDataByFilter(searchText);
+    for (int i = 0; i < result.length; i++) {
+      final UserModel user = UserModel.fromJson(result[i]);
+      users.add(user);
+    }
+    emit(users);
+  }
 }

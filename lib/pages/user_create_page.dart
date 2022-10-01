@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mongo_example/validator/validator.dart';
 import 'package:flutter_mongo_example/widgets/custom_button.dart';
 import 'package:flutter_mongo_example/widgets/custom_text_field.dart';
 import 'package:flutter_mongo_example/db_helper/mongodb.dart';
@@ -14,30 +15,39 @@ class UserCreatePage extends StatefulWidget {
 }
 
 class _UserCreatePageState extends State<UserCreatePage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Flutter Mongo"),
-      ),
-      body: Column(children: [
-        CustomTextField(controller: usernameController, hintText: "Username"),
-        CustomTextField(controller: passwordController, hintText: "Password"),
-        CustomButton(
-            onPressed: () {
-              insertUser(usernameController.text, passwordController.text)
-                  .then((value) => widget.onSuccess());
-            },
-            buttonTitle: "Insert")
-      ]),
-    );
+    return Form(
+        key: _formKey,
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          CustomTextField(
+            controller: nameController,
+            hintText: "Name",
+            validator: Validator().nameValidate,
+          ),
+          CustomTextField(
+            controller: phoneController,
+            hintText: "Phone",
+            validator: Validator().phoneValidate,
+          ),
+          CustomButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  insertUser(nameController.text, phoneController.text)
+                      .then((value) => widget.onSuccess());
+                  FocusScope.of(context).unfocus();
+                }
+              },
+              buttonTitle: "Insert")
+        ]));
   }
 
-  Future<void> insertUser(String username, String password) async {
+  Future<void> insertUser(String name, String phone) async {
     var id = mongo.ObjectId();
-    final data = UserModel(id: id, name: username, password: password);
+    final data = UserModel(id: id, name: name, phone: phone);
     await MongoDatabase.insert(data);
   }
 }
